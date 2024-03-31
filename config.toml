@@ -9,6 +9,8 @@ build_search_index = true
 
 theme = "anemone"
 
+generate_feed = true
+
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
@@ -17,6 +19,13 @@ highlight_code = true
 [extra]
 # Put all your custom variables here
 list_pages = true
+header_nav = [
+  { url = "/", name_en = "/home/" },
+  { url = "/about", name_en = "/about/" },
+  { url = "/blog", name_en = "/blog/" }
+]
+#display_author = true
+#author = "Christopher Woggon"
 
 
 

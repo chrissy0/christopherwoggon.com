@@ -22,7 +22,8 @@ list_pages = true
 header_nav = [
   { url = "/", name_en = "/home/" },
   { url = "/about", name_en = "/about/" },
-  { url = "/blog", name_en = "/blog/" }
+  { url = "/blog", name_en = "/blog/" },
+  { url = "/books", name_en = "/books/" },
 ]
 #display_author = true
 #author = "Christopher Woggon"

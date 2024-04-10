@@ -19,5 +19,3 @@ Stay connected with me:
 ## RenderLab.io
 
 Want to render Blender Cycles projects for free? Check out [RenderLab.io](https://renderlab.io).
-
-<meta name="facebook-domain-verification" content="htia4fehw0jnszj3curcjbjdndo9ib" />

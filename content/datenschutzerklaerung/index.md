@@ -1,4 +1,7 @@
-# Datenschutzerklärung
++++
+title = "Datenschutzerklärung"
++++
+
 **Christopher Woggon - Individuelle Softwarelösungen**
 
 Am Altrhein 26, 47495 Rheinberg

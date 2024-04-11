@@ -18,7 +18,7 @@ To communicate with the SP API, you need a `client_id`, a `client_secret`, a `re
 6. Your `seller_id` can be found on [this page](https://developer.amazon.com/settings/console/mycid). Here, it is referenced as _Your customer ID_.
 
 ## Step 2 » Discount your products
-I will give you the bare bones, minimum working example to discount a single product. I trust you can update the script to fit your needs. The example is for Amazon Germany 🇩🇪, but you can easily adjust the marketplace. I'm using [`python-amazon-sp-api` package](https://github.com/saleweaver/python-amazon-sp-api), which is a wrapper for the previously mentioned [Selling Partner API (SP API)](https://developer-docs.amazon.com/sp-api/).
+I will give you the bare bones, minimum working example to discount a single product. I trust you can update the script to fit your needs. The example is for Amazon Germany 🇩🇪, but you can easily adjust the marketplace. I'm using the [`python-amazon-sp-api` package](https://github.com/saleweaver/python-amazon-sp-api), which is a wrapper for the previously mentioned [Selling Partner API (SP API)](https://developer-docs.amazon.com/sp-api/).
 ```python
 from sp_api.api.listings_items.listings_items import ListingsItems
 from sp_api.base.marketplaces import Marketplaces

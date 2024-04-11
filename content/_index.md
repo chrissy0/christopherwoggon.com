@@ -3,7 +3,7 @@
 
 # Christopher Woggon
 
-![Profile Picture](profile_picture.png)
+<img src="profile_picture.png" style="width: 35%">
 
 Hey there,
 

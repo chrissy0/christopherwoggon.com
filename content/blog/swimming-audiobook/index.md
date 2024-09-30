@@ -36,7 +36,7 @@ def normalize_volume(input_path, output_path, target_loudness=-12.0):
         if begun or line == "{":
             begun = True
             result += line
-    loudnorm_stats = json.loads(result)
+    loudnorm_stats = json.loads(result.split('[out#')[0])
 
     normalization_params = f'loudnorm=I={target_loudness}:TP=-1.5:LRA=11:measured_I={loudnorm_stats["input_i"]}:measured_LRA={loudnorm_stats["input_lra"]}:measured_TP={loudnorm_stats["input_tp"]}:measured_thresh={loudnorm_stats["input_thresh"]}:offset={loudnorm_stats["target_offset"]}:linear=true:print_format=json'
 
@@ -113,3 +113,8 @@ You can download the first script (splitting, increasing volume) <a href="shokz_
 Hopefully this helps someone :)
 
 Chris
+
+### Update: First user (30th of September 2024)
+
+Today I've helped a reader set up the scripts on Windows. It made me realize how much work is necessary to make it work on a non-unix system. Still, we got it to work in the end. Glad I could help someone.
+

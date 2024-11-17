@@ -7,9 +7,9 @@ On this page you'll find a non-exhaustive list of my various projects and experi
 
 #### Startup Projects
 ---
-**Product AI: AI Generated Product Images for E-Commerce** (in development)
+**[ProductLab.so](https://productlab.so/): AI Generated Product Images for E-Commerce** (in development)
 
-AI generated product images that (1) actually represent the product and (2) don't look like a bad photoshop.
+AI generated product images that don't look like a bad photoshop.
 
 **[ZenDone.app](https://zendone.app/): Daily Task Planning** (in development)
 

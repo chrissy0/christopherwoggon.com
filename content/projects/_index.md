@@ -7,11 +7,15 @@ On this page you'll find a non-exhaustive list of my various projects and experi
 
 #### Startup Projects
 ---
+**[tinylaun.ch](https://tinylaun.ch/): A launch platform for your tiny startup.** (in development)
+
+Launch early, launch often. Don't overthink it, it's not a big deal.
+
 **[ProductLab.so](https://productlab.so/): AI Generated Product Images for E-Commerce** (in development)
 
 AI generated product images that don't look like a bad photoshop.
 
-**[ZenDone.app](https://zendone.app/): Daily Task Planning** (in development)
+**[ZenDone.app](https://zendone.app/): Daily Task Planning** (discontinued)
 
 A Sunsama inspired daily planner to fight overwhelm.
 

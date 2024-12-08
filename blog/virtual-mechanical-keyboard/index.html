@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+<title>Virtual Mechanical Keyboard: Make your keyboard sound like a mechanical keyboard</title>
+
+
+
+<meta name="title" content="Virtual Mechanical Keyboard: Make your keyboard sound like a mechanical keyboard">
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://christopherwoggon.com/blog/virtual-mechanical-keyboard/">
+
+<meta property="og:site_name" content="">
+
+
+<meta property="og:title" content="Virtual Mechanical Keyboard: Make your keyboard sound like a mechanical keyboard">
+
+
+
+
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://christopherwoggon.com/blog/virtual-mechanical-keyboard/">
+
+<meta property="twitter:title" content="Virtual Mechanical Keyboard: Make your keyboard sound like a mechanical keyboard">
+
+
+
+
+<link rel="canonical" href="https://christopherwoggon.com/blog/virtual-mechanical-keyboard/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://christopherwoggon.com/atom.xml"> 
+
+
+
+<link rel="stylesheet" type="text/css" href="https://speyll.github.io/suCSS/reset-min.css"/>
+<link rel="stylesheet" type="text/css" href="https://speyll.github.io/suCSS/suCSS-min.css"/>
+<link rel="stylesheet" type="text/css" href="https://christopherwoggon.com/css/style.css"/>
+
+<script src="https://christopherwoggon.com/js/script.js" defer></script>
+
+
+    <script defer data-website-id="6752f1a8e9b35320136d5011" data-domain="christopherwoggon.com" src="https://datafa.st/js/script.js"></script>
+</head>
+<body>
+      <header>
+          
+
+  
+
+
+  <nav id="nav-bar">
+    
+      <a href="&#x2F;" class="">
+        
+        &#x2F;home&#x2F;
+      </a>
+    
+      <a href="&#x2F;about" class="">
+        
+        &#x2F;about&#x2F;
+      </a>
+    
+      <a href="&#x2F;blog" class="">
+        
+        &#x2F;blog&#x2F;
+      </a>
+    
+      <a href="&#x2F;projects" class="">
+        
+        &#x2F;projects&#x2F;
+      </a>
+    
+      <a href="&#x2F;books" class="">
+        
+        &#x2F;books&#x2F;
+      </a>
+    
+      <a href="&#x2F;now" class="">
+        
+        &#x2F;now&#x2F;
+      </a>
+    
+    <div>
+      <input type="checkbox" id="theme-toggle" style="display: none;">
+      <label for="theme-toggle" id="theme-toggle-label"><svg id="theme-icon" class="icons"><use href="https://christopherwoggon.com/icons.svg#lightMode"></use></svg></label>
+      <audio id="theme-sound">
+        <source src="https://christopherwoggon.com/click.ogg" type="audio/ogg">
+      </audio>
+    </div>
+  </nav>
+
+
+      </header>
+      <main>
+          
+<!--<div><a href="..">..</a>/<span class="accent-data">virtual-mechanical-keyboard</span></div>-->
+<time datetime="2023-04-05">Published on: <span class="accent-data">2023-04-05</span></time>
+
+<h1>Virtual Mechanical Keyboard: Make your keyboard sound like a mechanical keyboard</h1>
+
+
+
+<p>Lately I’ve been looking into mechanical keyboards. As I spend most of my time in front of a screen, I thought – “why not invest a little to make the process more fun?”</p>
+<p>After days down the mechanical keyboards subreddit rabbit hole I came close to ordering one for myself, but I ended up opting for the Apple Magic Keyboard instead. I like the portability and also needed something which I could use silently in a public setting.</p>
+<p>But today, I found myself missing a little audio feedback for my keypresses. That’s when it hit me – why not just simulate the audio? No need for it to come from actual key presses.</p>
+<p>So I hacked together a tiny Python script in 5 minutes - and it works like a charm.</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">from </span><span>playsound </span><span style="color:#b48ead;">import </span><span>playsound
+</span><span style="color:#b48ead;">from </span><span>pynput.keyboard </span><span style="color:#b48ead;">import </span><span>Key, Listener
+</span><span style="color:#b48ead;">import </span><span>threading
+</span><span>
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">play_press</span><span>():
+</span><span>    </span><span style="color:#bf616a;">playsound</span><span>(&quot;</span><span style="color:#a3be8c;">mechanical.mp3</span><span>&quot;)
+</span><span>
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">on_press</span><span>(</span><span style="color:#bf616a;">_</span><span>):
+</span><span>    t = threading.</span><span style="color:#bf616a;">Thread</span><span>(</span><span style="color:#bf616a;">target</span><span>=play_press)
+</span><span>    t.</span><span style="color:#bf616a;">start</span><span>()
+</span><span>
+</span><span>
+</span><span style="color:#b48ead;">with </span><span style="color:#bf616a;">Listener</span><span>(</span><span style="color:#bf616a;">on_press</span><span>=on_press) </span><span style="color:#b48ead;">as </span><span>listener:
+</span><span>    listener.</span><span style="color:#bf616a;">join</span><span>()
+</span></code></pre>
+<p>Yep, that’s all.</p>
+<p>I’m using <code>pynput</code> to listen for key presses, then start a new thread upon key presses which plays the sound of a mechanical keyboard button press. The file <code>mechanical.mp3</code> needs to be in the same directory as the Python script.</p>
+<p>While it works without starting new threads, the script waits for the sound to finish playing. For fast typists, this leads to congestion and further key presses being played after the last key is pressed.</p>
+<p>This is the sound file I’m using for key presses:
+<div style="margin: 15px 0;">
+    <audio controls="" preload="none" src="mechanical.mp3" style="display: block; pointer-events: auto; width: 100%; position: relative;"></audio>
+</div></p>
+<p>I also played with the sound of a key release upon release, but I like it better with just the down press. If you’re interested in the key releases as well, adjust the code snippet like this:</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">from </span><span>playsound </span><span style="color:#b48ead;">import </span><span>playsound
+</span><span style="color:#b48ead;">from </span><span>pynput.keyboard </span><span style="color:#b48ead;">import </span><span>Key, Listener
+</span><span style="color:#b48ead;">import </span><span>threading
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">play_press</span><span>():
+</span><span>    </span><span style="color:#bf616a;">playsound</span><span>(&quot;</span><span style="color:#a3be8c;">mechanical_press.mp3</span><span>&quot;)
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">play_release</span><span>():
+</span><span>    </span><span style="color:#bf616a;">playsound</span><span>(&quot;</span><span style="color:#a3be8c;">mechanical_release.mp3</span><span>&quot;)
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">on_press</span><span>(</span><span style="color:#bf616a;">_</span><span>):
+</span><span>    t = threading.</span><span style="color:#bf616a;">Thread</span><span>(</span><span style="color:#bf616a;">target</span><span>=play_press)
+</span><span>    t.</span><span style="color:#bf616a;">start</span><span>()
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">on_release</span><span>(</span><span style="color:#bf616a;">_</span><span>):
+</span><span>    t = threading.</span><span style="color:#bf616a;">Thread</span><span>(</span><span style="color:#bf616a;">target</span><span>=play_release)
+</span><span>    t.</span><span style="color:#bf616a;">start</span><span>()
+</span><span>
+</span><span style="color:#b48ead;">with </span><span style="color:#bf616a;">Listener</span><span>(
+</span><span>        </span><span style="color:#bf616a;">on_press</span><span>=on_press,
+</span><span>        </span><span style="color:#bf616a;">on_release</span><span>=on_release) </span><span style="color:#b48ead;">as </span><span>listener:
+</span><span>    listener.</span><span style="color:#bf616a;">join</span><span>()
+</span></code></pre>
+<p>That’s all!</p>
+
+
+<p class="tags-data">
+  
+</p>
+
+      </main>
+      <footer>
+          <hr>
+<div id="footer-container">
+<!--  -->
+<!--  <div>-->
+<!--    <p>Theme and color theme licensed under <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Licence_MIT">MIT</a>.<br>-->
+<!--      Built with <a target="_blank" rel="noopener noreferrer" href="https://www.getzola.org">Zola</a> using <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/anemone">anemone</a> theme, <a target="_blank" rel="noopener noreferrer" href="https://speyll.github.io/suCSS/">suCSS</a> framework &amp; <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/veqev">veqev</a>.<br>-->
+<!--    </p>-->
+
+<!--  </div>-->
+  
+  <div>
+    <a class="no-style" target="_blank" rel="noopener noreferrer" href="https://christopherwoggon.com/atom.xml" title="Subscribe via RSS for updates."><svg class="icons"><use href="https://christopherwoggon.com/icons.svg#rss"></use></svg></a>
+  </div>
+  
+  <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a Coffee', '#29abe0', 'V7V7WSRYE');kofiwidget2.draw();</script>
+</div>
+
+      </footer>
+</body>
+</html>

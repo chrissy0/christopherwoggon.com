@@ -35,3 +35,9 @@ Virtual social media escape rooms that can be played right on escape rooms' soci
 **Improving Audiobooks on Shokz OpenSwim**
 
 I wrote some code to make audiobooks not suck on Shokz OpenSwim headphones. You can find the related blog post [here](@/blog/swimming-audiobook/index.md).
+
+#### Friends' Projects
+
+**[Open-source Boilerplates](https://opensourceboilerplates.com/): A Directory of Boilerplates**
+
+A curated list of open source boilerplates and starter kits for building modern applications. From web development with React & Next.js to mobile apps with React Native, Flutter, and native platforms.

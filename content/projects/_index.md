@@ -36,6 +36,12 @@ Virtual social media escape rooms that can be played right on escape rooms' soci
 
 I wrote some code to make audiobooks not suck on Shokz OpenSwim headphones. You can find the related blog post [here](@/blog/swimming-audiobook/index.md).
 
+#### Open Source Contributions
+---
+**Anki Flashcards**
+
+Added Korean keyboard support to the [Anki desktop app](https://github.com/ankitects/anki).
+
 #### Friends' Projects
 ---
 **[Open-source Boilerplates](https://opensourceboilerplates.com/): A Directory of Boilerplates**

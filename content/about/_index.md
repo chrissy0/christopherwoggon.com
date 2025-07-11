@@ -42,7 +42,7 @@ My go-to programming language. Great for quick prototyping of ideas. I have gain
 
 #### JavaScript/TypeScript (React, Next.js)
 
-I have built multiple [React](https://renderlab.io/) and [Next.js](https://zendone.app/) projects, as well as utilized TypeScript extensively for Supabase edge functions.
+I have built multiple [React](https://renderlab-inky.vercel.app/) and [Next.js](https://zendone.app/) projects, as well as utilized TypeScript extensively for Supabase edge functions.
 
 #### Java
 

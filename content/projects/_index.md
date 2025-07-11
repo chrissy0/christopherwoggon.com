@@ -19,7 +19,7 @@ AI generated product images that don't look like a bad photoshop.
 
 A Sunsama inspired daily planner to fight overwhelm.
 
-**[RenderLab.io](https://renderlab.io/): Blender Cloud Rendering** (discontinued)
+**[RenderLab.io](https://renderlab-inky.vercel.app/): Blender Cloud Rendering** (discontinued)
 Cheapest Blender cloud rendering on the market. Utilizes low-cost, private GPU compute marketplaces to undercut competitors' prices. Discontinued due to lack of interest from potential customers. Landing page kept online for now.
 
 **[dontwaitli.st](https://dontwaitli.st/): Waitlists With Incentives** (discontinued)

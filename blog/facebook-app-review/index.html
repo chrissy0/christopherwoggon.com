@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+<title>Facebook App Review without Test Accounts</title>
+
+
+
+<meta name="title" content="Facebook App Review without Test Accounts">
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://christopherwoggon.com/blog/facebook-app-review/">
+
+<meta property="og:site_name" content="">
+
+
+<meta property="og:title" content="Facebook App Review without Test Accounts">
+
+
+
+
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://christopherwoggon.com/blog/facebook-app-review/">
+
+<meta property="twitter:title" content="Facebook App Review without Test Accounts">
+
+
+
+
+<link rel="canonical" href="https://christopherwoggon.com/blog/facebook-app-review/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://christopherwoggon.com/atom.xml"> 
+
+
+
+<link rel="stylesheet" type="text/css" href="https://speyll.github.io/suCSS/reset-min.css"/>
+<link rel="stylesheet" type="text/css" href="https://speyll.github.io/suCSS/suCSS-min.css"/>
+<link rel="stylesheet" type="text/css" href="https://christopherwoggon.com/css/style.css"/>
+
+<script src="https://christopherwoggon.com/js/script.js" defer></script>
+
+
+    <script defer data-website-id="6752f1a8e9b35320136d5011" data-domain="christopherwoggon.com" src="https://datafa.st/js/script.js"></script>
+</head>
+<body>
+      <header>
+          
+
+  
+
+
+  <nav id="nav-bar">
+    
+      <a href="&#x2F;" class="">
+        
+        &#x2F;home&#x2F;
+      </a>
+    
+      <a href="&#x2F;about" class="">
+        
+        &#x2F;about&#x2F;
+      </a>
+    
+      <a href="&#x2F;blog" class="">
+        
+        &#x2F;blog&#x2F;
+      </a>
+    
+      <a href="&#x2F;projects" class="">
+        
+        &#x2F;projects&#x2F;
+      </a>
+    
+      <a href="&#x2F;books" class="">
+        
+        &#x2F;books&#x2F;
+      </a>
+    
+      <a href="&#x2F;now" class="">
+        
+        &#x2F;now&#x2F;
+      </a>
+    
+    <div>
+      <input type="checkbox" id="theme-toggle" style="display: none;">
+      <label for="theme-toggle" id="theme-toggle-label"><svg id="theme-icon" class="icons"><use href="https://christopherwoggon.com/icons.svg#lightMode"></use></svg></label>
+      <audio id="theme-sound">
+        <source src="https://christopherwoggon.com/click.ogg" type="audio/ogg">
+      </audio>
+    </div>
+  </nav>
+
+
+      </header>
+      <main>
+          
+<!--<div><a href="..">..</a>/<span class="accent-data">facebook-app-review</span></div>-->
+<time datetime="2024-04-17">Published on: <span class="accent-data">2024-04-17</span></time>
+
+<h1>Facebook App Review without Test Accounts</h1>
+
+
+
+<p>In this post I'll give you a no-bullshit guide to getting your facebook app reviewed without access to test accounts.</p>
+<p>I recently started working on a Facebook Messenger chatbot. In order for other people to be able to use it, the app needs to be reviewed. During the review, a facebook &quot;employee&quot; will try to use your app. Maybe you can already see the problem: The app cannot be used by other people until it is reviewed, but other people need to use it in order for it to be reviewed.</p>
+<p>Usually, you'd have to create a test user for this purpose, but that functionality is currently broken, and seems to have been for quite a while.</p>
+<p>It is possible to circumvent this problem by either creating another facebook account and giving it the tester role in your app, then letting the Facebook review staff know the login data for this account. Alternatively, you could give them access to your own account.</p>
+<p>No matter what you choose, there's one major problem: Facebook will probably block the login attempt due to <em>unsual activity</em>.</p>
+<p>I have solved this problem by activating 2FA for the test user account and making the generated TOTP codes available to the review staff.</p>
+<p>For this, I first extracted the token the TOTP codes are based on from Authy using <a href="https://gist.github.com/gboudreau/94bb0c11a6209c82418d01a59d958c93">this guide</a>. You'll have to find out how to do that for your TOTP app of choice.</p>
+<p>Next, I've adapted <a href="https://www.reddit.com/r/facebook/comments/16onkyz/how_to_get_your_meta_app_reviewed_without_test/">this guide</a> to a simple Flask server to run on my Hetzner VPS. </p>
+<p>I've created a file called <code>fb_t</code> containing the TOTP token. And here's the flask server:</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">from </span><span>flask </span><span style="color:#b48ead;">import </span><span>Flask
+</span><span style="color:#b48ead;">import </span><span>pyotp
+</span><span>
+</span><span>app = </span><span style="color:#bf616a;">Flask</span><span>(__name__)
+</span><span>
+</span><span>@app.</span><span style="color:#bf616a;">route</span><span>(&#39;</span><span style="color:#a3be8c;">/</span><span>&#39;)
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">hello_world</span><span>():
+</span><span>    </span><span style="color:#b48ead;">with </span><span style="color:#96b5b4;">open</span><span>(&quot;</span><span style="color:#a3be8c;">fb_t</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">r</span><span>&quot;) </span><span style="color:#b48ead;">as </span><span>handle:
+</span><span>        s = handle.</span><span style="color:#bf616a;">read</span><span>().</span><span style="color:#bf616a;">strip</span><span>()
+</span><span>
+</span><span>    totp = pyotp.</span><span style="color:#bf616a;">TOTP</span><span>(s)
+</span><span>    code = totp.</span><span style="color:#bf616a;">now</span><span>()
+</span><span>    </span><span style="color:#b48ead;">return </span><span>&quot;&quot;&quot;
+</span><span style="color:#a3be8c;">&lt;!DOCTYPE html&gt;
+</span><span style="color:#a3be8c;">&lt;html&gt;
+</span><span style="color:#a3be8c;">&lt;head&gt;
+</span><span style="color:#a3be8c;">    &lt;title&gt;2FA Code Retriever&lt;/title&gt;
+</span><span style="color:#a3be8c;">    &lt;style&gt;
+</span><span style="color:#a3be8c;">        body {
+</span><span style="color:#a3be8c;">            font-family: Arial, sans-serif;
+</span><span style="color:#a3be8c;">            text-align: center;
+</span><span style="color:#a3be8c;">        }
+</span><span style="color:#a3be8c;">        #code {
+</span><span style="color:#a3be8c;">            font-size: 36px;
+</span><span style="color:#a3be8c;">            font-weight: bold;
+</span><span style="color:#a3be8c;">            margin-top: 20px;
+</span><span style="color:#a3be8c;">        }
+</span><span style="color:#a3be8c;">        button {
+</span><span style="color:#a3be8c;">            padding: 10px 20px;
+</span><span style="color:#a3be8c;">            font-size: 18px;
+</span><span style="color:#a3be8c;">        }
+</span><span style="color:#a3be8c;">    &lt;/style&gt;
+</span><span style="color:#a3be8c;">&lt;/head&gt;</span><span>&quot;&quot;&quot;+</span><span style="color:#b48ead;">f</span><span>&quot;&quot;&quot;
+</span><span style="color:#a3be8c;">&lt;body&gt;
+</span><span style="color:#a3be8c;">    &lt;h1&gt;Current 2FA Code:&lt;/h1&gt;
+</span><span style="color:#a3be8c;">    &lt;div id=&quot;code&quot;&gt;</span><span>{code}</span><span style="color:#a3be8c;">&lt;/div&gt;
+</span><span style="color:#a3be8c;">    &lt;button onClick=&quot;window.location.reload();&quot;&gt;Refresh Code (only valid for a short time)&lt;/button&gt;
+</span><span style="color:#a3be8c;">&lt;/body&gt;
+</span><span style="color:#a3be8c;">&lt;/html&gt;
+</span><span style="color:#a3be8c;">    </span><span>&quot;&quot;&quot;
+</span><span>
+</span><span style="color:#b48ead;">if </span><span>__name__ == &#39;</span><span style="color:#a3be8c;">__main__</span><span>&#39;:
+</span><span>    app.</span><span style="color:#bf616a;">run</span><span>(</span><span style="color:#bf616a;">host</span><span>=&#39;</span><span style="color:#a3be8c;">0.0.0.0</span><span>&#39;, </span><span style="color:#bf616a;">port</span><span>=</span><span style="color:#d08770;">5005</span><span>)
+</span></code></pre>
+<p>It's dirty, but that's the whole point. It's a one time good-enough-is-good-enough kind of solution.</p>
+<p>Here's what the TOTP page looks like:
+<img src="https://christopherwoggon.com/blog/facebook-app-review/totp.png" alt="" /></p>
+<p>As a last step, I've submitted the app for review, mentioning the email and password for the facebook account as well as how to generate the TOTP codes and where to enter them. I've also recorded a screencast showing all the steps from opening a browser in incognito mode to successfully interacting with the chatbot. My app was reviewed and verified within 24 hours.</p>
+<p>I hope this helps someone.</p>
+<p>Chris</p>
+
+
+<p class="tags-data">
+  
+</p>
+
+      </main>
+      <footer>
+          <hr>
+<div id="footer-container">
+<!--  -->
+<!--  <div>-->
+<!--    <p>Theme and color theme licensed under <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Licence_MIT">MIT</a>.<br>-->
+<!--      Built with <a target="_blank" rel="noopener noreferrer" href="https://www.getzola.org">Zola</a> using <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/anemone">anemone</a> theme, <a target="_blank" rel="noopener noreferrer" href="https://speyll.github.io/suCSS/">suCSS</a> framework &amp; <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/veqev">veqev</a>.<br>-->
+<!--    </p>-->
+
+<!--  </div>-->
+  
+  <div>
+    <a class="no-style" target="_blank" rel="noopener noreferrer" href="https://christopherwoggon.com/atom.xml" title="Subscribe via RSS for updates."><svg class="icons"><use href="https://christopherwoggon.com/icons.svg#rss"></use></svg></a>
+  </div>
+  
+  <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a Coffee', '#29abe0', 'V7V7WSRYE');kofiwidget2.draw();</script>
+</div>
+
+      </footer>
+</body>
+</html>

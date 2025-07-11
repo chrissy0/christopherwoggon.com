@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+<title>How to run sale promotions on Amazon using Python</title>
+
+
+
+<meta name="title" content="How to run sale promotions on Amazon using Python">
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://christopherwoggon.com/blog/amazon-api-prices-quantites-sales/">
+
+<meta property="og:site_name" content="">
+
+
+<meta property="og:title" content="How to run sale promotions on Amazon using Python">
+
+
+
+
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://christopherwoggon.com/blog/amazon-api-prices-quantites-sales/">
+
+<meta property="twitter:title" content="How to run sale promotions on Amazon using Python">
+
+
+
+
+<link rel="canonical" href="https://christopherwoggon.com/blog/amazon-api-prices-quantites-sales/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://christopherwoggon.com/atom.xml"> 
+
+
+
+<link rel="stylesheet" type="text/css" href="https://speyll.github.io/suCSS/reset-min.css"/>
+<link rel="stylesheet" type="text/css" href="https://speyll.github.io/suCSS/suCSS-min.css"/>
+<link rel="stylesheet" type="text/css" href="https://christopherwoggon.com/css/style.css"/>
+
+<script src="https://christopherwoggon.com/js/script.js" defer></script>
+
+
+    <script defer data-website-id="6752f1a8e9b35320136d5011" data-domain="christopherwoggon.com" src="https://datafa.st/js/script.js"></script>
+</head>
+<body>
+      <header>
+          
+
+  
+
+
+  <nav id="nav-bar">
+    
+      <a href="&#x2F;" class="">
+        
+        &#x2F;home&#x2F;
+      </a>
+    
+      <a href="&#x2F;about" class="">
+        
+        &#x2F;about&#x2F;
+      </a>
+    
+      <a href="&#x2F;blog" class="">
+        
+        &#x2F;blog&#x2F;
+      </a>
+    
+      <a href="&#x2F;projects" class="">
+        
+        &#x2F;projects&#x2F;
+      </a>
+    
+      <a href="&#x2F;books" class="">
+        
+        &#x2F;books&#x2F;
+      </a>
+    
+      <a href="&#x2F;now" class="">
+        
+        &#x2F;now&#x2F;
+      </a>
+    
+    <div>
+      <input type="checkbox" id="theme-toggle" style="display: none;">
+      <label for="theme-toggle" id="theme-toggle-label"><svg id="theme-icon" class="icons"><use href="https://christopherwoggon.com/icons.svg#lightMode"></use></svg></label>
+      <audio id="theme-sound">
+        <source src="https://christopherwoggon.com/click.ogg" type="audio/ogg">
+      </audio>
+    </div>
+  </nav>
+
+
+      </header>
+      <main>
+          
+<!--<div><a href="..">..</a>/<span class="accent-data">amazon-api-prices-quantites-sales</span></div>-->
+<time datetime="2024-04-11">Published on: <span class="accent-data">2024-04-11</span></time>
+
+<h1>How to run sale promotions on Amazon using Python</h1>
+
+
+
+<p>This is a no bullshit, to the point guide on how to run sale promotions on Amazon through the <a href="https://developer-docs.amazon.com/sp-api/">Selling Partner API (SP API)</a> in Python.</p>
+<h2 id="step-1-get-the-necessary-credentials">Step 1 » Get the necessary credentials</h2>
+<p>To communicate with the SP API, you need a <code>client_id</code>, a <code>client_secret</code>, a <code>refresh_token</code> and the <code>seller_id</code>.</p>
+<ol>
+<li>Login to sellercentral, open the menu using the three lines in the top left, locate the option <em>Apps and Services</em>, then select <em>Develop Apps</em> in the submenu.
+<img src="https://christopherwoggon.com/blog/amazon-api-prices-quantites-sales/amazon_menu_develop_apps.png" alt="" /></li>
+<li>If not done already, set up a developer profile in this page. If not requesting restricted roles, which is not necessary for our purposes, you can enter <em>&quot;internal tests&quot;</em> in all free text fields in the <em>Use Cases</em> and <em>Security Controls</em> sections. Your registration should be approved within a few minutes.</li>
+<li>Going back to the page opened in step 1, click <em>+ Add new app client</em>, enter an appropriate name and select <code>SP API</code> as the API type. I have selected the <em>Pricing</em>, <em>Inventory and Order Tracking</em> and <em>Product Listing</em> roles, but probably not all of them are required. I selected <em>No</em> to the question regarding the delegation of access to PII, but you might want to select <em>Yes</em>, depending on your circumstances.</li>
+<li>You can now click <em>View</em> in the <em>LWA credentials</em> column to display the <code>client_id</code> and <code>client_secret</code>.</li>
+<li>Next, click the down arrow next to <em>Edit App</em> and select <em>Authorise</em>. You'll see your <code>refresh_token</code>.
+<img src="https://christopherwoggon.com/blog/amazon-api-prices-quantites-sales/authorize.png" alt="" /></li>
+<li>Your <code>seller_id</code> can be found on <a href="https://developer.amazon.com/settings/console/mycid">this page</a>. Here, it is referenced as <em>Your customer ID</em>.</li>
+</ol>
+<h2 id="step-2-discount-your-products">Step 2 » Discount your products</h2>
+<p>I will give you the bare bones, minimum working example to discount a single product. I trust you can update the script to fit your needs. The example is for Amazon Germany 🇩🇪, but you can easily adjust the marketplace. I'm using the <a href="https://github.com/saleweaver/python-amazon-sp-api"><code>python-amazon-sp-api</code> package</a>, which is a wrapper for the previously mentioned <a href="https://developer-docs.amazon.com/sp-api/">Selling Partner API (SP API)</a>.</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">from </span><span>sp_api.api.listings_items.listings_items </span><span style="color:#b48ead;">import </span><span>ListingsItems
+</span><span style="color:#b48ead;">from </span><span>sp_api.base.marketplaces </span><span style="color:#b48ead;">import </span><span>Marketplaces
+</span><span>
+</span><span style="color:#65737e;"># don&#39;t hard code confidential data
+</span><span>refresh_token = &quot;</span><span style="color:#a3be8c;">&lt;refresh_token&gt;</span><span>&quot;
+</span><span>client_id = &quot;</span><span style="color:#a3be8c;">&lt;client_id&gt;</span><span>&quot;
+</span><span>client_secret = &quot;</span><span style="color:#a3be8c;">&lt;client_secret&gt;</span><span>&quot;
+</span><span>seller_id = &quot;</span><span style="color:#a3be8c;">&lt;seller_id&gt;</span><span>&quot;
+</span><span>
+</span><span>amazon_sku = &quot;</span><span style="color:#a3be8c;">&lt;amazon_sku&gt;</span><span>&quot;
+</span><span>sale_price = </span><span style="color:#d08770;">14.99
+</span><span>currency = &quot;</span><span style="color:#a3be8c;">EUR</span><span>&quot;
+</span><span>sale_start = &quot;</span><span style="color:#a3be8c;">2024-04-11T13:52:00Z</span><span>&quot;
+</span><span>sale_end = &quot;</span><span style="color:#a3be8c;">2024-04-25T23:00:00Z</span><span>&quot;
+</span><span>
+</span><span>client = </span><span style="color:#bf616a;">ListingsItems</span><span>(
+</span><span>    </span><span style="color:#bf616a;">marketplace</span><span>=Marketplaces.</span><span style="color:#bf616a;">DE</span><span>,
+</span><span>    </span><span style="color:#bf616a;">credentials</span><span>={
+</span><span>        &quot;</span><span style="color:#a3be8c;">refresh_token</span><span>&quot;: refresh_token,
+</span><span>        &quot;</span><span style="color:#a3be8c;">lwa_app_id</span><span>&quot;: client_id,
+</span><span>        &quot;</span><span style="color:#a3be8c;">lwa_client_secret</span><span>&quot;: client_secret
+</span><span>    }
+</span><span>)
+</span><span>
+</span><span>response = client.</span><span style="color:#bf616a;">patch_listings_item</span><span>(
+</span><span>    </span><span style="color:#bf616a;">sellerId</span><span>=seller_id,
+</span><span>    </span><span style="color:#bf616a;">sku</span><span>=amazon_sku,
+</span><span>    </span><span style="color:#bf616a;">marketplaceIds</span><span>=</span><span style="color:#b48ead;">f</span><span>&quot;{Marketplaces.</span><span style="color:#bf616a;">DE</span><span>.marketplace_id}&quot;,
+</span><span>    </span><span style="color:#bf616a;">body</span><span>={
+</span><span>        &quot;</span><span style="color:#a3be8c;">productType</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">PRODUCT</span><span>&quot;,
+</span><span>        &quot;</span><span style="color:#a3be8c;">patches</span><span>&quot;: [
+</span><span>            {
+</span><span>                &quot;</span><span style="color:#a3be8c;">op</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">replace</span><span>&quot;,
+</span><span>                &quot;</span><span style="color:#a3be8c;">path</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">/attributes/purchasable_offer</span><span>&quot;,
+</span><span>                &quot;</span><span style="color:#a3be8c;">value</span><span>&quot;: [
+</span><span>                    {
+</span><span>                        &quot;</span><span style="color:#a3be8c;">marketplace_id</span><span>&quot;: Marketplaces.</span><span style="color:#bf616a;">DE</span><span>.marketplace_id,
+</span><span>                        &quot;</span><span style="color:#a3be8c;">currency</span><span>&quot;: currency,
+</span><span>                        &quot;</span><span style="color:#a3be8c;">discounted_price</span><span>&quot;: [
+</span><span>                            {
+</span><span>                                &quot;</span><span style="color:#a3be8c;">schedule</span><span>&quot;: [
+</span><span>                                    {
+</span><span>                                        &quot;</span><span style="color:#a3be8c;">start_at</span><span>&quot;: sale_start,
+</span><span>                                        &quot;</span><span style="color:#a3be8c;">end_at</span><span>&quot;: sale_end,
+</span><span>                                        &quot;</span><span style="color:#a3be8c;">value_with_tax</span><span>&quot;: sale_price
+</span><span>                                    }
+</span><span>                                ]
+</span><span>                            }
+</span><span>                        ]
+</span><span>                    }
+</span><span>                ]
+</span><span>            }
+</span><span>        ]
+</span><span>    }
+</span><span>)
+</span><span>
+</span><span style="color:#b48ead;">assert </span><span>response.payload[&quot;</span><span style="color:#a3be8c;">status</span><span>&quot;] == &quot;</span><span style="color:#a3be8c;">ACCEPTED</span><span>&quot;
+</span></code></pre>
+<p>Hopefully this helps someone!</p>
+<p>Chris</p>
+
+
+<p class="tags-data">
+  
+</p>
+
+      </main>
+      <footer>
+          <hr>
+<div id="footer-container">
+<!--  -->
+<!--  <div>-->
+<!--    <p>Theme and color theme licensed under <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Licence_MIT">MIT</a>.<br>-->
+<!--      Built with <a target="_blank" rel="noopener noreferrer" href="https://www.getzola.org">Zola</a> using <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/anemone">anemone</a> theme, <a target="_blank" rel="noopener noreferrer" href="https://speyll.github.io/suCSS/">suCSS</a> framework &amp; <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/veqev">veqev</a>.<br>-->
+<!--    </p>-->
+
+<!--  </div>-->
+  
+  <div>
+    <a class="no-style" target="_blank" rel="noopener noreferrer" href="https://christopherwoggon.com/atom.xml" title="Subscribe via RSS for updates."><svg class="icons"><use href="https://christopherwoggon.com/icons.svg#rss"></use></svg></a>
+  </div>
+  
+  <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a Coffee', '#29abe0', 'V7V7WSRYE');kofiwidget2.draw();</script>
+</div>
+
+      </footer>
+</body>
+</html>

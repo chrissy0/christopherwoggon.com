@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title></title>
+    <link href="https://christopherwoggon.com/atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="https://christopherwoggon.com"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-10-02T00:00:00+00:00</updated>
+    <id>https://christopherwoggon.com/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Document Everything</title>
+        <published>2024-10-02T00:00:00+00:00</published>
+        <updated>2024-10-02T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://christopherwoggon.com/blog/document-everything/" type="text/html"/>
+        <id>https://christopherwoggon.com/blog/document-everything/</id>
+        
+        <content type="html">&lt;p&gt;Earlier this year, I&#x27;ve started documenting stuff I&#x27;m working on or figure out on this blog. I&#x27;ve never shared my posts on social media or elsewhere and didn&#x27;t expect anyone to randomly stumble across my posts – at least for a while. This changed a few days back, when I was messaged by a reader interested in my &lt;a href=&quot;https:&#x2F;&#x2F;christopherwoggon.com&#x2F;blog&#x2F;swimming-audiobook&#x2F;&quot;&gt;Shokz OpenSwim Audiobooks&lt;&#x2F;a&gt; script.&lt;&#x2F;p&gt;
+&lt;p&gt;Surprised that somebody found my post, I was happy to help out and set up the reader&#x27;s private machine to be able to run my scripts. They messaged me later saying that everything worked perfectly and expressed their gratitude for my help. They also donated two Ko-Fis (equiv. 10 EUR) to my &lt;a href=&quot;https:&#x2F;&#x2F;ko-fi.com&#x2F;christopherwoggon&quot;&gt;Ko-Fi page&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;While I don&#x27;t rely on donations, it felt great putting something out there and actually have someone benefit from my work. Incidentally, the 10 EUR were my first non-work-related internet dollars (euros). I now feel motivated to keep sharing what I&#x27;m working on, on the off chance that somebody might find it useful in the future.&lt;&#x2F;p&gt;
+&lt;p&gt;My posts are pretty random, covering a wide range of topics, so I&#x27;m unsure if there is an actual target audience for my blog. But it&#x27;s good to know that Google has my back and suggests my posts to users that are interested in any single entry.&lt;&#x2F;p&gt;
+&lt;p&gt;If any of my posts ever help you, please do &lt;a href=&quot;mailto:christopher.woggon@gmail.com&quot;&gt;reach out&lt;&#x2F;a&gt;. I&#x27;m always happy to hear that something I&#x27;ve made improved someone else&#x27;s life.&lt;&#x2F;p&gt;
+&lt;p&gt;Until next time,&lt;&#x2F;p&gt;
+&lt;p&gt;Chris&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Facebook App Review without Test Accounts</title>
+        <published>2024-04-17T00:00:00+00:00</published>
+        <updated>2024-04-17T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://christopherwoggon.com/blog/facebook-app-review/" type="text/html"/>
+        <id>https://christopherwoggon.com/blog/facebook-app-review/</id>
+        
+        <content type="html">&lt;p&gt;In this post I&#x27;ll give you a no-bullshit guide to getting your facebook app reviewed without access to test accounts.&lt;&#x2F;p&gt;
+&lt;p&gt;I recently started working on a Facebook Messenger chatbot. In order for other people to be able to use it, the app needs to be reviewed. During the review, a facebook &amp;quot;employee&amp;quot; will try to use your app. Maybe you can already see the problem: The app cannot be used by other people until it is reviewed, but other people need to use it in order for it to be reviewed.&lt;&#x2F;p&gt;
+&lt;p&gt;Usually, you&#x27;d have to create a test user for this purpose, but that functionality is currently broken, and seems to have been for quite a while.&lt;&#x2F;p&gt;
+&lt;p&gt;It is possible to circumvent this problem by either creating another facebook account and giving it the tester role in your app, then letting the Facebook review staff know the login data for this account. Alternatively, you could give them access to your own account.&lt;&#x2F;p&gt;
+&lt;p&gt;No matter what you choose, there&#x27;s one major problem: Facebook will probably block the login attempt due to &lt;em&gt;unsual activity&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I have solved this problem by activating 2FA for the test user account and making the generated TOTP codes available to the review staff.&lt;&#x2F;p&gt;
+&lt;p&gt;For this, I first extracted the token the TOTP codes are based on from Authy using &lt;a href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;gboudreau&#x2F;94bb0c11a6209c82418d01a59d958c93&quot;&gt;this guide&lt;&#x2F;a&gt;. You&#x27;ll have to find out how to do that for your TOTP app of choice.&lt;&#x2F;p&gt;
+&lt;p&gt;Next, I&#x27;ve adapted &lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;facebook&#x2F;comments&#x2F;16onkyz&#x2F;how_to_get_your_meta_app_reviewed_without_test&#x2F;&quot;&gt;this guide&lt;&#x2F;a&gt; to a simple Flask server to run on my Hetzner VPS. &lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve created a file called &lt;code&gt;fb_t&lt;&#x2F;code&gt; containing the TOTP token. And here&#x27;s the flask server:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;flask &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;Flask
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;pyotp
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;app = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Flask&lt;&#x2F;span&gt;&lt;span&gt;(__name__)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;@app.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;route&lt;&#x2F;span&gt;&lt;span&gt;(&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;hello_world&lt;&#x2F;span&gt;&lt;span&gt;():
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;with &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;open&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;fb_t&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;r&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;as &lt;&#x2F;span&gt;&lt;span&gt;handle:
+&lt;&#x2F;span&gt;&lt;span&gt;        s = handle.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;read&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;strip&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    totp = pyotp.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;TOTP&lt;&#x2F;span&gt;&lt;span&gt;(s)
+&lt;&#x2F;span&gt;&lt;span&gt;    code = totp.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;now&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;html&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;head&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;    &amp;lt;title&amp;gt;2FA Code Retriever&amp;lt;&#x2F;title&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;    &amp;lt;style&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;        body {
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;            font-family: Arial, sans-serif;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;            text-align: center;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;        }
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;        #code {
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;            font-size: 36px;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;            font-weight: bold;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;            margin-top: 20px;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;        }
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;        button {
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;            padding: 10px 20px;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;            font-size: 18px;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;        }
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;    &amp;lt;&#x2F;style&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;&#x2F;head&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;quot;&amp;quot;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;body&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;    &amp;lt;h1&amp;gt;Current 2FA Code:&amp;lt;&#x2F;h1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;    &amp;lt;div id=&amp;quot;code&amp;quot;&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt;{code}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;&#x2F;div&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;    &amp;lt;button onClick=&amp;quot;window.location.reload();&amp;quot;&amp;gt;Refresh Code (only valid for a short time)&amp;lt;&#x2F;button&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;&#x2F;body&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;&#x2F;html&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;    &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;__name__ == &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;__main__&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;:
+&lt;&#x2F;span&gt;&lt;span&gt;    app.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;host&lt;&#x2F;span&gt;&lt;span&gt;=&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;0.0.0.0&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;port&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;5005&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;It&#x27;s dirty, but that&#x27;s the whole point. It&#x27;s a one time good-enough-is-good-enough kind of solution.&lt;&#x2F;p&gt;
+&lt;p&gt;Here&#x27;s what the TOTP page looks like:
+&lt;img src=&quot;https:&#x2F;&#x2F;christopherwoggon.com&#x2F;blog&#x2F;facebook-app-review&#x2F;totp.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;As a last step, I&#x27;ve submitted the app for review, mentioning the email and password for the facebook account as well as how to generate the TOTP codes and where to enter them. I&#x27;ve also recorded a screencast showing all the steps from opening a browser in incognito mode to successfully interacting with the chatbot. My app was reviewed and verified within 24 hours.&lt;&#x2F;p&gt;
+&lt;p&gt;I hope this helps someone.&lt;&#x2F;p&gt;
+&lt;p&gt;Chris&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to run sale promotions on Amazon using Python</title>
+        <published>2024-04-11T00:00:00+00:00</published>
+        <updated>2024-04-11T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://christopherwoggon.com/blog/amazon-api-prices-quantites-sales/" type="text/html"/>
+        <id>https://christopherwoggon.com/blog/amazon-api-prices-quantites-sales/</id>
+        
+        <content type="html">&lt;p&gt;This is a no bullshit, to the point guide on how to run sale promotions on Amazon through the &lt;a href=&quot;https:&#x2F;&#x2F;developer-docs.amazon.com&#x2F;sp-api&#x2F;&quot;&gt;Selling Partner API (SP API)&lt;&#x2F;a&gt; in Python.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;step-1-get-the-necessary-credentials&quot;&gt;Step 1 » Get the necessary credentials&lt;&#x2F;h2&gt;
+&lt;p&gt;To communicate with the SP API, you need a &lt;code&gt;client_id&lt;&#x2F;code&gt;, a &lt;code&gt;client_secret&lt;&#x2F;code&gt;, a &lt;code&gt;refresh_token&lt;&#x2F;code&gt; and the &lt;code&gt;seller_id&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Login to sellercentral, open the menu using the three lines in the top left, locate the option &lt;em&gt;Apps and Services&lt;&#x2F;em&gt;, then select &lt;em&gt;Develop Apps&lt;&#x2F;em&gt; in the submenu.
+&lt;img src=&quot;https:&#x2F;&#x2F;christopherwoggon.com&#x2F;blog&#x2F;amazon-api-prices-quantites-sales&#x2F;amazon_menu_develop_apps.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;If not done already, set up a developer profile in this page. If not requesting restricted roles, which is not necessary for our purposes, you can enter &lt;em&gt;&amp;quot;internal tests&amp;quot;&lt;&#x2F;em&gt; in all free text fields in the &lt;em&gt;Use Cases&lt;&#x2F;em&gt; and &lt;em&gt;Security Controls&lt;&#x2F;em&gt; sections. Your registration should be approved within a few minutes.&lt;&#x2F;li&gt;
+&lt;li&gt;Going back to the page opened in step 1, click &lt;em&gt;+ Add new app client&lt;&#x2F;em&gt;, enter an appropriate name and select &lt;code&gt;SP API&lt;&#x2F;code&gt; as the API type. I have selected the &lt;em&gt;Pricing&lt;&#x2F;em&gt;, &lt;em&gt;Inventory and Order Tracking&lt;&#x2F;em&gt; and &lt;em&gt;Product Listing&lt;&#x2F;em&gt; roles, but probably not all of them are required. I selected &lt;em&gt;No&lt;&#x2F;em&gt; to the question regarding the delegation of access to PII, but you might want to select &lt;em&gt;Yes&lt;&#x2F;em&gt;, depending on your circumstances.&lt;&#x2F;li&gt;
+&lt;li&gt;You can now click &lt;em&gt;View&lt;&#x2F;em&gt; in the &lt;em&gt;LWA credentials&lt;&#x2F;em&gt; column to display the &lt;code&gt;client_id&lt;&#x2F;code&gt; and &lt;code&gt;client_secret&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;Next, click the down arrow next to &lt;em&gt;Edit App&lt;&#x2F;em&gt; and select &lt;em&gt;Authorise&lt;&#x2F;em&gt;. You&#x27;ll see your &lt;code&gt;refresh_token&lt;&#x2F;code&gt;.
+&lt;img src=&quot;https:&#x2F;&#x2F;christopherwoggon.com&#x2F;blog&#x2F;amazon-api-prices-quantites-sales&#x2F;authorize.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Your &lt;code&gt;seller_id&lt;&#x2F;code&gt; can be found on &lt;a href=&quot;https:&#x2F;&#x2F;developer.amazon.com&#x2F;settings&#x2F;console&#x2F;mycid&quot;&gt;this page&lt;&#x2F;a&gt;. Here, it is referenced as &lt;em&gt;Your customer ID&lt;&#x2F;em&gt;.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;step-2-discount-your-products&quot;&gt;Step 2 » Discount your products&lt;&#x2F;h2&gt;
+&lt;p&gt;I will give you the bare bones, minimum working example to discount a single product. I trust you can update the script to fit your needs. The example is for Amazon Germany 🇩🇪, but you can easily adjust the marketplace. I&#x27;m using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;saleweaver&#x2F;python-amazon-sp-api&quot;&gt;&lt;code&gt;python-amazon-sp-api&lt;&#x2F;code&gt; package&lt;&#x2F;a&gt;, which is a wrapper for the previously mentioned &lt;a href=&quot;https:&#x2F;&#x2F;developer-docs.amazon.com&#x2F;sp-api&#x2F;&quot;&gt;Selling Partner API (SP API)&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;sp_api.api.listings_items.listings_items &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;ListingsItems
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;sp_api.base.marketplaces &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;Marketplaces
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# don&amp;#39;t hard code confidential data
+&lt;&#x2F;span&gt;&lt;span&gt;refresh_token = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;refresh_token&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;client_id = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;client_id&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;client_secret = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;client_secret&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;seller_id = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;seller_id&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;amazon_sku = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;lt;amazon_sku&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;sale_price = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;14.99
+&lt;&#x2F;span&gt;&lt;span&gt;currency = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;EUR&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;sale_start = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2024-04-11T13:52:00Z&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;sale_end = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2024-04-25T23:00:00Z&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;client = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ListingsItems&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;marketplace&lt;&#x2F;span&gt;&lt;span&gt;=Marketplaces.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;DE&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;credentials&lt;&#x2F;span&gt;&lt;span&gt;={
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;refresh_token&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: refresh_token,
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;lwa_app_id&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: client_id,
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;lwa_client_secret&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: client_secret
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;response = client.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;patch_listings_item&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sellerId&lt;&#x2F;span&gt;&lt;span&gt;=seller_id,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sku&lt;&#x2F;span&gt;&lt;span&gt;=amazon_sku,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;marketplaceIds&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;{Marketplaces.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;DE&lt;&#x2F;span&gt;&lt;span&gt;.marketplace_id}&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;={
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;productType&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;PRODUCT&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;patches&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: [
+&lt;&#x2F;span&gt;&lt;span&gt;            {
+&lt;&#x2F;span&gt;&lt;span&gt;                &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;op&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;replace&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;                &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;path&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;attributes&#x2F;purchasable_offer&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;                &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;value&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: [
+&lt;&#x2F;span&gt;&lt;span&gt;                    {
+&lt;&#x2F;span&gt;&lt;span&gt;                        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;marketplace_id&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: Marketplaces.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;DE&lt;&#x2F;span&gt;&lt;span&gt;.marketplace_id,
+&lt;&#x2F;span&gt;&lt;span&gt;                        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;currency&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: currency,
+&lt;&#x2F;span&gt;&lt;span&gt;                        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;discounted_price&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: [
+&lt;&#x2F;span&gt;&lt;span&gt;                            {
+&lt;&#x2F;span&gt;&lt;span&gt;                                &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;schedule&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: [
+&lt;&#x2F;span&gt;&lt;span&gt;                                    {
+&lt;&#x2F;span&gt;&lt;span&gt;                                        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;start_at&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: sale_start,
+&lt;&#x2F;span&gt;&lt;span&gt;                                        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;end_at&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: sale_end,
+&lt;&#x2F;span&gt;&lt;span&gt;                                        &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;value_with_tax&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;: sale_price
+&lt;&#x2F;span&gt;&lt;span&gt;                                    }
+&lt;&#x2F;span&gt;&lt;span&gt;                                ]
+&lt;&#x2F;span&gt;&lt;span&gt;                            }
+&lt;&#x2F;span&gt;&lt;span&gt;                        ]
+&lt;&#x2F;span&gt;&lt;span&gt;                    }
+&lt;&#x2F;span&gt;&lt;span&gt;                ]
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;        ]
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;assert &lt;&#x2F;span&gt;&lt;span&gt;response.payload[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;status&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;] == &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ACCEPTED&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Hopefully this helps someone!&lt;&#x2F;p&gt;
+&lt;p&gt;Chris&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Improving Audiobooks on Shokz OpenSwim</title>
+        <published>2024-04-01T00:00:00+00:00</published>
+        <updated>2024-04-01T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://christopherwoggon.com/blog/swimming-audiobook/" type="text/html"/>
+        <id>https://christopherwoggon.com/blog/swimming-audiobook/</id>
+        
+        <content type="html">&lt;p&gt;If you’re anything like me, you love swimming. Recently, this hobby of mine has gotten a massive upgrade when I ordered the Shokz OpenSwim headphones.&lt;&#x2F;p&gt;
+&lt;p&gt;While great for music, for me, the real strength of these headphones is allowing me to listen to podcasts and audiobooks during my workouts. While workouts at the gym are usually too intense to focus, swimming while learning about new topics is great.&lt;&#x2F;p&gt;
+&lt;p&gt;Due to Bluetooth not working in water, these headphones are basically MP3 players. This seemed a bit annoying to me at first, but by now I love having a separate device, allowing me to immerse myself in a podcast or book without constant interruptions.&lt;&#x2F;p&gt;
+&lt;p&gt;One feature I’m missing is skipping ahead or back inside a single track, for example a 7 hour audiobook. This post explores how to get around this limitation.&lt;&#x2F;p&gt;
+&lt;p&gt;My workaround is chopping up long MP3s like podcasts and audiobooks into 2 minute chunks. This essentially turns the skip track functionality into a skip ahead function, allowing me to skip ahead and crucially rewind a piece of media in two minute increments.&lt;&#x2F;p&gt;
+&lt;p&gt;The code I’ve written for this purpose also increases the volume of the audio file, as conversation is sometimes hard to hear while swimming. Bonus tip: Enable swimming mode before starting your workout. This makes conversation more clear.&lt;&#x2F;p&gt;
+&lt;p&gt;The following function increases the volume of an MP3 file:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;json
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;subprocess
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;normalize_volume&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;input_path&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;output_path&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;target_loudness&lt;&#x2F;span&gt;&lt;span&gt;=-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;12.0&lt;&#x2F;span&gt;&lt;span&gt;):
+&lt;&#x2F;span&gt;&lt;span&gt;    analyze_cmd = [
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ffmpeg&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;-i&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, input_path, &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;-af&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;,
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;loudnorm=I=&lt;&#x2F;span&gt;&lt;span&gt;{target_loudness}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:TP=-1.5:LRA=11:print_format=json&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;-f&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;-&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    ]
+&lt;&#x2F;span&gt;&lt;span&gt;    analyze_result = subprocess.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;(analyze_cmd, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;capture_output&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;text&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    result = &amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    lines = analyze_result.stderr.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;splitlines&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;    begun = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;False
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;line &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span&gt;lines:
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;begun or line == &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;:
+&lt;&#x2F;span&gt;&lt;span&gt;            begun = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True
+&lt;&#x2F;span&gt;&lt;span&gt;            result += line
+&lt;&#x2F;span&gt;&lt;span&gt;    loudnorm_stats = json.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;loads&lt;&#x2F;span&gt;&lt;span&gt;(result.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;split&lt;&#x2F;span&gt;&lt;span&gt;(&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;[out#&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;)[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;])
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    normalization_params = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;loudnorm=I=&lt;&#x2F;span&gt;&lt;span&gt;{target_loudness}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:TP=-1.5:LRA=11:measured_I=&lt;&#x2F;span&gt;&lt;span&gt;{loudnorm_stats[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;input_i&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;]}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:measured_LRA=&lt;&#x2F;span&gt;&lt;span&gt;{loudnorm_stats[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;input_lra&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;]}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:measured_TP=&lt;&#x2F;span&gt;&lt;span&gt;{loudnorm_stats[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;input_tp&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;]}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:measured_thresh=&lt;&#x2F;span&gt;&lt;span&gt;{loudnorm_stats[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;input_thresh&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;]}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:offset=&lt;&#x2F;span&gt;&lt;span&gt;{loudnorm_stats[&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;target_offset&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;]}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:linear=true:print_format=json&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    normalization_cmd = [
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;ffmpeg&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;-i&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, input_path, &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;-af&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;, normalization_params, output_path
+&lt;&#x2F;span&gt;&lt;span&gt;    ]
+&lt;&#x2F;span&gt;&lt;span&gt;    subprocess.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;(normalization_cmd)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This snippet invokes a function which splits the MP3 file into chunks, indirectly increasing audio levels by calling the previously defined function:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;pydub &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;AudioSegment
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;math
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;os
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;split_and_normalize&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;source_file&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;output_folder&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;split_length&lt;&#x2F;span&gt;&lt;span&gt;):
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;not os.path.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exists&lt;&#x2F;span&gt;&lt;span&gt;(output_folder):
+&lt;&#x2F;span&gt;&lt;span&gt;        os.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;makedirs&lt;&#x2F;span&gt;&lt;span&gt;(output_folder)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    audio = AudioSegment.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;from_mp3&lt;&#x2F;span&gt;&lt;span&gt;(source_file)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    total_length_seconds = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;(audio) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1000
+&lt;&#x2F;span&gt;&lt;span&gt;    num_splits = math.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ceil&lt;&#x2F;span&gt;&lt;span&gt;(total_length_seconds &#x2F; (split_length * &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;60&lt;&#x2F;span&gt;&lt;span&gt;))
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    source_file_name = source_file.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;split&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)[-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;][:-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;range&lt;&#x2F;span&gt;&lt;span&gt;(num_splits):
+&lt;&#x2F;span&gt;&lt;span&gt;        start_ms = i * split_length * &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;60 &lt;&#x2F;span&gt;&lt;span&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1000
+&lt;&#x2F;span&gt;&lt;span&gt;        end_ms = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;min&lt;&#x2F;span&gt;&lt;span&gt;((i + &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;) * split_length * &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;60 &lt;&#x2F;span&gt;&lt;span&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1000&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;(audio))
+&lt;&#x2F;span&gt;&lt;span&gt;        split_audio = audio[start_ms:end_ms]
+&lt;&#x2F;span&gt;&lt;span&gt;        split_filename = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;{output_folder}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;{source_file_name}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;str&lt;&#x2F;span&gt;&lt;span&gt;(i+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;zfill&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;5&lt;&#x2F;span&gt;&lt;span&gt;)}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.mp3&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        normalized_filename = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;{output_folder}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;{source_file_name}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;str&lt;&#x2F;span&gt;&lt;span&gt;(i+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;zfill&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;5&lt;&#x2F;span&gt;&lt;span&gt;)}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;_normalized.mp3&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        split_audio.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;export&lt;&#x2F;span&gt;&lt;span&gt;(split_filename, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;format&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mp3&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;normalize_volume&lt;&#x2F;span&gt;&lt;span&gt;(split_filename, normalized_filename)
+&lt;&#x2F;span&gt;&lt;span&gt;        os.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;unlink&lt;&#x2F;span&gt;&lt;span&gt;(split_filename)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;__name__ == &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;__main__&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;:
+&lt;&#x2F;span&gt;&lt;span&gt;    source_file = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;location&#x2F;of-my&#x2F;audio_file.mp3&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    output_folder = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;location&#x2F;of-output-files&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    split_length = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;split_and_normalize&lt;&#x2F;span&gt;&lt;span&gt;(source_file, output_folder, split_length)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Another problem I&#x27;ve encountered is that playback is ordered by the date and time MP3 files are copied. Not only is it slow and annoying to copy hundreds of individual MP3 files one by one to ensure proper order, which is essential for content such as audiobooks and podcasts, sometimes the order is still messed up if copying one MP3 split is initiated before another copy operation is finished. I have written the following script to easily copy all files in order.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;os
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;shutil
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;pathlib &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;Path
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;source_folder = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;path&#x2F;to&#x2F;audiobook-splits&#x2F;folder&#x2F;previously&#x2F;generated&#x2F;some_audiobook_you_want_to_listen_to&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;target_folder = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;Volumes&#x2F;OpenSwim&#x2F;Books&#x2F;Some Audibook You Want To Listen To&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;mp3_files = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;sorted&lt;&#x2F;span&gt;&lt;span&gt;([&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;{source_folder}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;{file}&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;file &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span&gt;os.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;listdir&lt;&#x2F;span&gt;&lt;span&gt;(source_folder) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;file.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;endswith&lt;&#x2F;span&gt;&lt;span&gt;(&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.mp3&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;)])
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# create folder if non-existent
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Path&lt;&#x2F;span&gt;&lt;span&gt;(target_folder).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mkdir&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;parents&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exist_ok&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;True&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;file &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span&gt;mp3_files:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;print&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Copying &lt;&#x2F;span&gt;&lt;span&gt;{file}&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;    command = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;cp &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;{file}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\&amp;quot; \&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;{target_folder}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    shutil.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;copy2&lt;&#x2F;span&gt;&lt;span&gt;(file, target_folder)
+&lt;&#x2F;span&gt;&lt;span&gt;    os.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sync&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;code&gt;os.sync()&lt;&#x2F;code&gt; is called after every file, ensuring that the previous copy operation has finished before the next one is initiated. Without this, the order is still messed up from time to time.&lt;&#x2F;p&gt;
+&lt;p&gt;One downside of the Shokz OpenSwim I was unable to solve is that skipping to another folder to listen to music or some other content, and then coming back to the audiobook or podcast, causes the device to start at the beginning of the original audio file. Thus, it&#x27;s usually best to stick to and finish one piece of content before moving on to other folders.&lt;&#x2F;p&gt;
+&lt;p&gt;You can download the first script (splitting, increasing volume) &lt;a href=&quot;shokz_openswim_splitting_and_volume_script.py&quot; download&gt;here&lt;&#x2F;a&gt; and the second script (copying) &lt;a href=&quot;shokz_openswim_copy_script.py&quot; download&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Hopefully this helps someone :)&lt;&#x2F;p&gt;
+&lt;p&gt;Chris&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;update-first-user-30th-of-september-2024&quot;&gt;Update: First user (30th of September 2024)&lt;&#x2F;h3&gt;
+&lt;p&gt;Today I&#x27;ve helped a reader set up the scripts on Windows. It made me realize how much work is necessary to make it work on a non-unix system. Still, we got it to work in the end. Glad I could help someone.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Digital Minimalism by Cal Newport</title>
+        <published>2024-04-01T00:00:00+00:00</published>
+        <updated>2024-04-01T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://christopherwoggon.com/books/cal-newport-digital-minimalism/" type="text/html"/>
+        <id>https://christopherwoggon.com/books/cal-newport-digital-minimalism/</id>
+        
+        <content type="html">&lt;p&gt;Content will follow.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Virtual Mechanical Keyboard: Make your keyboard sound like a mechanical keyboard</title>
+        <published>2023-04-05T00:00:00+00:00</published>
+        <updated>2023-04-05T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://christopherwoggon.com/blog/virtual-mechanical-keyboard/" type="text/html"/>
+        <id>https://christopherwoggon.com/blog/virtual-mechanical-keyboard/</id>
+        
+        <content type="html">&lt;p&gt;Lately I’ve been looking into mechanical keyboards. As I spend most of my time in front of a screen, I thought – “why not invest a little to make the process more fun?”&lt;&#x2F;p&gt;
+&lt;p&gt;After days down the mechanical keyboards subreddit rabbit hole I came close to ordering one for myself, but I ended up opting for the Apple Magic Keyboard instead. I like the portability and also needed something which I could use silently in a public setting.&lt;&#x2F;p&gt;
+&lt;p&gt;But today, I found myself missing a little audio feedback for my keypresses. That’s when it hit me – why not just simulate the audio? No need for it to come from actual key presses.&lt;&#x2F;p&gt;
+&lt;p&gt;So I hacked together a tiny Python script in 5 minutes - and it works like a charm.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;playsound &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;playsound
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;pynput.keyboard &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;Key, Listener
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;threading
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;play_press&lt;&#x2F;span&gt;&lt;span&gt;():
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;playsound&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mechanical.mp3&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;on_press&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;):
+&lt;&#x2F;span&gt;&lt;span&gt;    t = threading.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Thread&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;target&lt;&#x2F;span&gt;&lt;span&gt;=play_press)
+&lt;&#x2F;span&gt;&lt;span&gt;    t.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;start&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;with &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Listener&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;on_press&lt;&#x2F;span&gt;&lt;span&gt;=on_press) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;as &lt;&#x2F;span&gt;&lt;span&gt;listener:
+&lt;&#x2F;span&gt;&lt;span&gt;    listener.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Yep, that’s all.&lt;&#x2F;p&gt;
+&lt;p&gt;I’m using &lt;code&gt;pynput&lt;&#x2F;code&gt; to listen for key presses, then start a new thread upon key presses which plays the sound of a mechanical keyboard button press. The file &lt;code&gt;mechanical.mp3&lt;&#x2F;code&gt; needs to be in the same directory as the Python script.&lt;&#x2F;p&gt;
+&lt;p&gt;While it works without starting new threads, the script waits for the sound to finish playing. For fast typists, this leads to congestion and further key presses being played after the last key is pressed.&lt;&#x2F;p&gt;
+&lt;p&gt;This is the sound file I’m using for key presses:
+&lt;div style=&quot;margin: 15px 0;&quot;&gt;
+    &lt;audio controls=&quot;&quot; preload=&quot;none&quot; src=&quot;mechanical.mp3&quot; style=&quot;display: block; pointer-events: auto; width: 100%; position: relative;&quot;&gt;&lt;&#x2F;audio&gt;
+&lt;&#x2F;div&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I also played with the sound of a key release upon release, but I like it better with just the down press. If you’re interested in the key releases as well, adjust the code snippet like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;playsound &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;playsound
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;from &lt;&#x2F;span&gt;&lt;span&gt;pynput.keyboard &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;Key, Listener
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;threading
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;play_press&lt;&#x2F;span&gt;&lt;span&gt;():
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;playsound&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mechanical_press.mp3&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;play_release&lt;&#x2F;span&gt;&lt;span&gt;():
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;playsound&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;mechanical_release.mp3&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;on_press&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;):
+&lt;&#x2F;span&gt;&lt;span&gt;    t = threading.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Thread&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;target&lt;&#x2F;span&gt;&lt;span&gt;=play_press)
+&lt;&#x2F;span&gt;&lt;span&gt;    t.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;start&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;on_release&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;):
+&lt;&#x2F;span&gt;&lt;span&gt;    t = threading.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Thread&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;target&lt;&#x2F;span&gt;&lt;span&gt;=play_release)
+&lt;&#x2F;span&gt;&lt;span&gt;    t.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;start&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;with &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Listener&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;on_press&lt;&#x2F;span&gt;&lt;span&gt;=on_press,
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;on_release&lt;&#x2F;span&gt;&lt;span&gt;=on_release) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;as &lt;&#x2F;span&gt;&lt;span&gt;listener:
+&lt;&#x2F;span&gt;&lt;span&gt;    listener.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;That’s all!&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

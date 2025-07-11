@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="robots" content="index, follow">
+
+
+
+
+
+
+
+
+
+
+<title>Improving Audiobooks on Shokz OpenSwim</title>
+
+
+
+<meta name="title" content="Improving Audiobooks on Shokz OpenSwim">
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://christopherwoggon.com/blog/swimming-audiobook/">
+
+<meta property="og:site_name" content="">
+
+
+<meta property="og:title" content="Improving Audiobooks on Shokz OpenSwim">
+
+
+
+
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://christopherwoggon.com/blog/swimming-audiobook/">
+
+<meta property="twitter:title" content="Improving Audiobooks on Shokz OpenSwim">
+
+
+
+
+<link rel="canonical" href="https://christopherwoggon.com/blog/swimming-audiobook/">
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://christopherwoggon.com/atom.xml"> 
+
+
+
+<link rel="stylesheet" type="text/css" href="https://speyll.github.io/suCSS/reset-min.css"/>
+<link rel="stylesheet" type="text/css" href="https://speyll.github.io/suCSS/suCSS-min.css"/>
+<link rel="stylesheet" type="text/css" href="https://christopherwoggon.com/css/style.css"/>
+
+<script src="https://christopherwoggon.com/js/script.js" defer></script>
+
+
+    <script defer data-website-id="6752f1a8e9b35320136d5011" data-domain="christopherwoggon.com" src="https://datafa.st/js/script.js"></script>
+</head>
+<body>
+      <header>
+          
+
+  
+
+
+  <nav id="nav-bar">
+    
+      <a href="&#x2F;" class="">
+        
+        &#x2F;home&#x2F;
+      </a>
+    
+      <a href="&#x2F;about" class="">
+        
+        &#x2F;about&#x2F;
+      </a>
+    
+      <a href="&#x2F;blog" class="">
+        
+        &#x2F;blog&#x2F;
+      </a>
+    
+      <a href="&#x2F;projects" class="">
+        
+        &#x2F;projects&#x2F;
+      </a>
+    
+      <a href="&#x2F;books" class="">
+        
+        &#x2F;books&#x2F;
+      </a>
+    
+      <a href="&#x2F;now" class="">
+        
+        &#x2F;now&#x2F;
+      </a>
+    
+    <div>
+      <input type="checkbox" id="theme-toggle" style="display: none;">
+      <label for="theme-toggle" id="theme-toggle-label"><svg id="theme-icon" class="icons"><use href="https://christopherwoggon.com/icons.svg#lightMode"></use></svg></label>
+      <audio id="theme-sound">
+        <source src="https://christopherwoggon.com/click.ogg" type="audio/ogg">
+      </audio>
+    </div>
+  </nav>
+
+
+      </header>
+      <main>
+          
+<!--<div><a href="..">..</a>/<span class="accent-data">swimming-audiobook</span></div>-->
+<time datetime="2024-04-01">Published on: <span class="accent-data">2024-04-01</span></time>
+
+<h1>Improving Audiobooks on Shokz OpenSwim</h1>
+
+
+
+<p>If you’re anything like me, you love swimming. Recently, this hobby of mine has gotten a massive upgrade when I ordered the Shokz OpenSwim headphones.</p>
+<p>While great for music, for me, the real strength of these headphones is allowing me to listen to podcasts and audiobooks during my workouts. While workouts at the gym are usually too intense to focus, swimming while learning about new topics is great.</p>
+<p>Due to Bluetooth not working in water, these headphones are basically MP3 players. This seemed a bit annoying to me at first, but by now I love having a separate device, allowing me to immerse myself in a podcast or book without constant interruptions.</p>
+<p>One feature I’m missing is skipping ahead or back inside a single track, for example a 7 hour audiobook. This post explores how to get around this limitation.</p>
+<p>My workaround is chopping up long MP3s like podcasts and audiobooks into 2 minute chunks. This essentially turns the skip track functionality into a skip ahead function, allowing me to skip ahead and crucially rewind a piece of media in two minute increments.</p>
+<p>The code I’ve written for this purpose also increases the volume of the audio file, as conversation is sometimes hard to hear while swimming. Bonus tip: Enable swimming mode before starting your workout. This makes conversation more clear.</p>
+<p>The following function increases the volume of an MP3 file:</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">import </span><span>json
+</span><span style="color:#b48ead;">import </span><span>subprocess
+</span><span>
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">normalize_volume</span><span>(</span><span style="color:#bf616a;">input_path</span><span>, </span><span style="color:#bf616a;">output_path</span><span>, </span><span style="color:#bf616a;">target_loudness</span><span>=-</span><span style="color:#d08770;">12.0</span><span>):
+</span><span>    analyze_cmd = [
+</span><span>        &#39;</span><span style="color:#a3be8c;">ffmpeg</span><span>&#39;, &#39;</span><span style="color:#a3be8c;">-i</span><span>&#39;, input_path, &#39;</span><span style="color:#a3be8c;">-af</span><span>&#39;,
+</span><span>        </span><span style="color:#b48ead;">f</span><span>&#39;</span><span style="color:#a3be8c;">loudnorm=I=</span><span>{target_loudness}</span><span style="color:#a3be8c;">:TP=-1.5:LRA=11:print_format=json</span><span>&#39;, &#39;</span><span style="color:#a3be8c;">-f</span><span>&#39;, &#39;</span><span style="color:#a3be8c;">null</span><span>&#39;, &#39;</span><span style="color:#a3be8c;">-</span><span>&#39;
+</span><span>    ]
+</span><span>    analyze_result = subprocess.</span><span style="color:#bf616a;">run</span><span>(analyze_cmd, </span><span style="color:#bf616a;">capture_output</span><span>=</span><span style="color:#d08770;">True</span><span>, </span><span style="color:#bf616a;">text</span><span>=</span><span style="color:#d08770;">True</span><span>)
+</span><span>
+</span><span>    result = &quot;&quot;
+</span><span>    lines = analyze_result.stderr.</span><span style="color:#bf616a;">splitlines</span><span>()
+</span><span>    begun = </span><span style="color:#d08770;">False
+</span><span>    </span><span style="color:#b48ead;">for </span><span>line </span><span style="color:#b48ead;">in </span><span>lines:
+</span><span>        </span><span style="color:#b48ead;">if </span><span>begun or line == &quot;</span><span style="color:#a3be8c;">{</span><span>&quot;:
+</span><span>            begun = </span><span style="color:#d08770;">True
+</span><span>            result += line
+</span><span>    loudnorm_stats = json.</span><span style="color:#bf616a;">loads</span><span>(result.</span><span style="color:#bf616a;">split</span><span>(&#39;</span><span style="color:#a3be8c;">[out#</span><span>&#39;)[</span><span style="color:#d08770;">0</span><span>])
+</span><span>
+</span><span>    normalization_params = </span><span style="color:#b48ead;">f</span><span>&#39;</span><span style="color:#a3be8c;">loudnorm=I=</span><span>{target_loudness}</span><span style="color:#a3be8c;">:TP=-1.5:LRA=11:measured_I=</span><span>{loudnorm_stats[&quot;</span><span style="color:#a3be8c;">input_i</span><span>&quot;]}</span><span style="color:#a3be8c;">:measured_LRA=</span><span>{loudnorm_stats[&quot;</span><span style="color:#a3be8c;">input_lra</span><span>&quot;]}</span><span style="color:#a3be8c;">:measured_TP=</span><span>{loudnorm_stats[&quot;</span><span style="color:#a3be8c;">input_tp</span><span>&quot;]}</span><span style="color:#a3be8c;">:measured_thresh=</span><span>{loudnorm_stats[&quot;</span><span style="color:#a3be8c;">input_thresh</span><span>&quot;]}</span><span style="color:#a3be8c;">:offset=</span><span>{loudnorm_stats[&quot;</span><span style="color:#a3be8c;">target_offset</span><span>&quot;]}</span><span style="color:#a3be8c;">:linear=true:print_format=json</span><span>&#39;
+</span><span>
+</span><span>    normalization_cmd = [
+</span><span>        &#39;</span><span style="color:#a3be8c;">ffmpeg</span><span>&#39;, &#39;</span><span style="color:#a3be8c;">-i</span><span>&#39;, input_path, &#39;</span><span style="color:#a3be8c;">-af</span><span>&#39;, normalization_params, output_path
+</span><span>    ]
+</span><span>    subprocess.</span><span style="color:#bf616a;">run</span><span>(normalization_cmd)
+</span></code></pre>
+<p>This snippet invokes a function which splits the MP3 file into chunks, indirectly increasing audio levels by calling the previously defined function:</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">from </span><span>pydub </span><span style="color:#b48ead;">import </span><span>AudioSegment
+</span><span style="color:#b48ead;">import </span><span>math
+</span><span style="color:#b48ead;">import </span><span>os
+</span><span>
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">split_and_normalize</span><span>(</span><span style="color:#bf616a;">source_file</span><span>, </span><span style="color:#bf616a;">output_folder</span><span>, </span><span style="color:#bf616a;">split_length</span><span>):
+</span><span>    </span><span style="color:#b48ead;">if </span><span>not os.path.</span><span style="color:#bf616a;">exists</span><span>(output_folder):
+</span><span>        os.</span><span style="color:#bf616a;">makedirs</span><span>(output_folder)
+</span><span>
+</span><span>    audio = AudioSegment.</span><span style="color:#bf616a;">from_mp3</span><span>(source_file)
+</span><span>
+</span><span>    total_length_seconds = </span><span style="color:#96b5b4;">len</span><span>(audio) / </span><span style="color:#d08770;">1000
+</span><span>    num_splits = math.</span><span style="color:#bf616a;">ceil</span><span>(total_length_seconds / (split_length * </span><span style="color:#d08770;">60</span><span>))
+</span><span>
+</span><span>    source_file_name = source_file.</span><span style="color:#bf616a;">split</span><span>(&quot;</span><span style="color:#a3be8c;">/</span><span>&quot;)[-</span><span style="color:#d08770;">1</span><span>][:-</span><span style="color:#d08770;">4</span><span>]
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">for </span><span>i </span><span style="color:#b48ead;">in </span><span style="color:#96b5b4;">range</span><span>(num_splits):
+</span><span>        start_ms = i * split_length * </span><span style="color:#d08770;">60 </span><span>* </span><span style="color:#d08770;">1000
+</span><span>        end_ms = </span><span style="color:#96b5b4;">min</span><span>((i + </span><span style="color:#d08770;">1</span><span>) * split_length * </span><span style="color:#d08770;">60 </span><span>* </span><span style="color:#d08770;">1000</span><span>, </span><span style="color:#96b5b4;">len</span><span>(audio))
+</span><span>        split_audio = audio[start_ms:end_ms]
+</span><span>        split_filename = </span><span style="color:#b48ead;">f</span><span>&quot;{output_folder}</span><span style="color:#a3be8c;">/</span><span>{source_file_name}</span><span style="color:#a3be8c;">_</span><span>{</span><span style="color:#bf616a;">str</span><span>(i+</span><span style="color:#d08770;">1</span><span>).</span><span style="color:#bf616a;">zfill</span><span>(</span><span style="color:#d08770;">5</span><span>)}</span><span style="color:#a3be8c;">.mp3</span><span>&quot;
+</span><span>        normalized_filename = </span><span style="color:#b48ead;">f</span><span>&quot;{output_folder}</span><span style="color:#a3be8c;">/</span><span>{source_file_name}</span><span style="color:#a3be8c;">_</span><span>{</span><span style="color:#bf616a;">str</span><span>(i+</span><span style="color:#d08770;">1</span><span>).</span><span style="color:#bf616a;">zfill</span><span>(</span><span style="color:#d08770;">5</span><span>)}</span><span style="color:#a3be8c;">_normalized.mp3</span><span>&quot;
+</span><span>        split_audio.</span><span style="color:#bf616a;">export</span><span>(split_filename, </span><span style="color:#bf616a;">format</span><span>=&quot;</span><span style="color:#a3be8c;">mp3</span><span>&quot;)
+</span><span>        </span><span style="color:#bf616a;">normalize_volume</span><span>(split_filename, normalized_filename)
+</span><span>        os.</span><span style="color:#bf616a;">unlink</span><span>(split_filename)
+</span><span>
+</span><span>
+</span><span style="color:#b48ead;">if </span><span>__name__ == &quot;</span><span style="color:#a3be8c;">__main__</span><span>&quot;:
+</span><span>    source_file = &quot;</span><span style="color:#a3be8c;">/location/of-my/audio_file.mp3</span><span>&quot;
+</span><span>    output_folder = &quot;</span><span style="color:#a3be8c;">/location/of-output-files</span><span>&quot;
+</span><span>    split_length = </span><span style="color:#d08770;">2
+</span><span>
+</span><span>    </span><span style="color:#bf616a;">split_and_normalize</span><span>(source_file, output_folder, split_length)
+</span></code></pre>
+<p>Another problem I've encountered is that playback is ordered by the date and time MP3 files are copied. Not only is it slow and annoying to copy hundreds of individual MP3 files one by one to ensure proper order, which is essential for content such as audiobooks and podcasts, sometimes the order is still messed up if copying one MP3 split is initiated before another copy operation is finished. I have written the following script to easily copy all files in order.</p>
+<pre data-lang="python" style="background-color:#2b303b;color:#c0c5ce;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#b48ead;">import </span><span>os
+</span><span style="color:#b48ead;">import </span><span>shutil
+</span><span style="color:#b48ead;">from </span><span>pathlib </span><span style="color:#b48ead;">import </span><span>Path
+</span><span>
+</span><span>source_folder = &quot;</span><span style="color:#a3be8c;">/path/to/audiobook-splits/folder/previously/generated/some_audiobook_you_want_to_listen_to</span><span>&quot;
+</span><span>target_folder = &quot;</span><span style="color:#a3be8c;">/Volumes/OpenSwim/Books/Some Audibook You Want To Listen To</span><span>&quot;
+</span><span>
+</span><span>mp3_files = </span><span style="color:#96b5b4;">sorted</span><span>([</span><span style="color:#b48ead;">f</span><span>&quot;{source_folder}</span><span style="color:#a3be8c;">/</span><span>{file}&quot; </span><span style="color:#b48ead;">for </span><span>file </span><span style="color:#b48ead;">in </span><span>os.</span><span style="color:#bf616a;">listdir</span><span>(source_folder) </span><span style="color:#b48ead;">if </span><span>file.</span><span style="color:#bf616a;">endswith</span><span>(&#39;</span><span style="color:#a3be8c;">.mp3</span><span>&#39;)])
+</span><span>
+</span><span style="color:#65737e;"># create folder if non-existent
+</span><span style="color:#bf616a;">Path</span><span>(target_folder).</span><span style="color:#bf616a;">mkdir</span><span>(</span><span style="color:#bf616a;">parents</span><span>=</span><span style="color:#d08770;">True</span><span>, </span><span style="color:#bf616a;">exist_ok</span><span>=</span><span style="color:#d08770;">True</span><span>)
+</span><span>
+</span><span style="color:#b48ead;">for </span><span>file </span><span style="color:#b48ead;">in </span><span>mp3_files:
+</span><span>    </span><span style="color:#96b5b4;">print</span><span>(</span><span style="color:#b48ead;">f</span><span>&quot;</span><span style="color:#a3be8c;">Copying </span><span>{file}&quot;)
+</span><span>    command = </span><span style="color:#b48ead;">f</span><span>&quot;</span><span style="color:#a3be8c;">cp </span><span style="color:#96b5b4;">\&quot;</span><span>{file}</span><span style="color:#96b5b4;">\&quot; \&quot;</span><span>{target_folder}</span><span style="color:#96b5b4;">\&quot;</span><span>&quot;
+</span><span>    shutil.</span><span style="color:#bf616a;">copy2</span><span>(file, target_folder)
+</span><span>    os.</span><span style="color:#bf616a;">sync</span><span>()
+</span></code></pre>
+<p><code>os.sync()</code> is called after every file, ensuring that the previous copy operation has finished before the next one is initiated. Without this, the order is still messed up from time to time.</p>
+<p>One downside of the Shokz OpenSwim I was unable to solve is that skipping to another folder to listen to music or some other content, and then coming back to the audiobook or podcast, causes the device to start at the beginning of the original audio file. Thus, it's usually best to stick to and finish one piece of content before moving on to other folders.</p>
+<p>You can download the first script (splitting, increasing volume) <a href="shokz_openswim_splitting_and_volume_script.py" download>here</a> and the second script (copying) <a href="shokz_openswim_copy_script.py" download>here</a>.</p>
+<p>Hopefully this helps someone :)</p>
+<p>Chris</p>
+<h3 id="update-first-user-30th-of-september-2024">Update: First user (30th of September 2024)</h3>
+<p>Today I've helped a reader set up the scripts on Windows. It made me realize how much work is necessary to make it work on a non-unix system. Still, we got it to work in the end. Glad I could help someone.</p>
+
+
+<p class="tags-data">
+  
+</p>
+
+      </main>
+      <footer>
+          <hr>
+<div id="footer-container">
+<!--  -->
+<!--  <div>-->
+<!--    <p>Theme and color theme licensed under <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Licence_MIT">MIT</a>.<br>-->
+<!--      Built with <a target="_blank" rel="noopener noreferrer" href="https://www.getzola.org">Zola</a> using <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/anemone">anemone</a> theme, <a target="_blank" rel="noopener noreferrer" href="https://speyll.github.io/suCSS/">suCSS</a> framework &amp; <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/veqev">veqev</a>.<br>-->
+<!--    </p>-->
+
+<!--  </div>-->
+  
+  <div>
+    <a class="no-style" target="_blank" rel="noopener noreferrer" href="https://christopherwoggon.com/atom.xml" title="Subscribe via RSS for updates."><svg class="icons"><use href="https://christopherwoggon.com/icons.svg#rss"></use></svg></a>
+  </div>
+  
+  <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a Coffee', '#29abe0', 'V7V7WSRYE');kofiwidget2.draw();</script>
+</div>
+
+      </footer>
+</body>
+</html>
